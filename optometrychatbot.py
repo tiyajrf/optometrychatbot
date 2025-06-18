@@ -91,7 +91,7 @@ Use the following syllabus to answer questions accurately and clearly.
 # ✅ Inline CSS for user and bot chat bubbles
 user_style = """
 <div style="
-    background-color:#D0E6FF;
+    background-color:#4682B4;
     padding:10px;
     border-radius:10px;
     margin:10px 0;
@@ -138,7 +138,7 @@ if user_input:
     # Call OpenAI
     try:
         response = openai.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=chat_messages,
             max_tokens=500,
             temperature=0.7
