@@ -1,15 +1,32 @@
 import streamlit as st
 import openai
-import os
 
-# ✅ Secure API key from environment variable
-api_key = os.getenv("OPENAI_API_KEY")
-if not api_key:
-    st.error("🚫 OPENAI_API_KEY environment variable not set. Please set it before running.")
+# --- API Key input + link to generate key ---
+if "api_key" not in st.session_state:
+    st.session_state.api_key = ""
+
+st.markdown(
+    """
+    Need an OpenAI API key?  
+    <a href="https://platform.openai.com/account/api-keys" target="_blank" style="color: #4CAF50; font-weight: bold;">
+        Click here to create one
+    </a>
+    """,
+    unsafe_allow_html=True
+)
+
+api_key_input = st.text_input(
+    "Enter your OpenAI API Key:", type="password", value=st.session_state.api_key
+)
+
+if api_key_input:
+    st.session_state.api_key = api_key_input
+    openai.api_key = st.session_state.api_key
+else:
+    st.warning("Please enter your OpenAI API Key to use the chatbot.")
     st.stop()
-openai.api_key = api_key
 
-# ✅ Optometry syllabus context
+# Optometry syllabus context
 syllabus_context = """
 Bachelor of Optometry Syllabus (India):
 
@@ -80,7 +97,7 @@ Semesters 7 & 8:
 - Clinical Internship
 """
 
-# ✅ System message for GPT
+# System message for GPT
 system_message = f"""
 You are a helpful assistant for Bachelor of Optometry students in India.
 Use the following syllabus to answer questions accurately and clearly.
@@ -88,7 +105,7 @@ Use the following syllabus to answer questions accurately and clearly.
 {syllabus_context}
 """
 
-# ✅ Inline CSS for user and bot chat bubbles
+# Inline CSS for user and bot chat bubbles
 user_style = """
 <div style="
     background-color:#4682B4;
@@ -104,26 +121,27 @@ user_style = """
 
 bot_style = """
 <div style="
-    background-color:#D0FFD6;
+    background-color:#006400;
     padding:10px;
     border-radius:10px;
     margin:10px 0;
     max-width:70%;
     font-family: Arial, sans-serif;
     word-wrap: break-word;
+    color: #D0FFD6;
 ">
 <b>Bot:</b> {}</div>
 """
 
-# ✅ Initialize chat history
+# Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# ✅ UI
+# UI
 st.title("🧑‍⚕️ Optometry Chatbot (India)")
 user_input = st.text_input("Ask your question here:")
 
-# ✅ Process input
+# Process input
 if user_input:
     st.session_state.messages.append(("user", user_input))
 
@@ -149,8 +167,7 @@ if user_input:
 
     st.session_state.messages.append(("bot", bot_reply))
 
-# ✅ Display messages
+# Display messages
 for role, msg in st.session_state.messages:
     style = user_style if role == "user" else bot_style
     st.markdown(style.format(msg), unsafe_allow_html=True)
-
