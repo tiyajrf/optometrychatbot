@@ -6,6 +6,7 @@ st.set_page_config(page_title="Optometry Chatbot", layout="centered")
 st.title("🧑‍⚕️ Optometry Chatbot (India)")
 
 st.markdown("Chat live with the assistant below:")
+st.subheader ("https://cdn.botpress.cloud/webchat/v3.0/shareable.html?configUrl=https://files.bpcontent.cloud/2025/06/20/11/20250620115114-AGZK5VDG.json")
 
 # Embed Botpress WebChat widget
 components.html("""
