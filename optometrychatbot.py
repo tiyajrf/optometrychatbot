@@ -1,30 +1,10 @@
 import streamlit as st
-import openai
+
 
 # --- API Key input + link to generate key ---
-if "api_key" not in st.session_state:
-    st.session_state.api_key = ""
 
-st.markdown(
-    """
-    Need an OpenAI API key?  
-    <a href="https://platform.openai.com/account/api-keys" target="_blank" style="color: #4CAF50; font-weight: bold;">
-        Click here to create one
-    </a>
-    """,
-    unsafe_allow_html=True
-)
 
-api_key_input = st.text_input(
-    "Enter your OpenAI API Key:", type="password", value=st.session_state.api_key
-)
 
-if api_key_input:
-    st.session_state.api_key = api_key_input
-    openai.api_key = st.session_state.api_key
-else:
-    st.warning("Please enter your OpenAI API Key to use the chatbot.")
-    st.stop()
 
 # Optometry syllabus context
 syllabus_context = """
@@ -139,7 +119,7 @@ if "messages" not in st.session_state:
 
 # UI
 st.title("🧑‍⚕️ Optometry Chatbot (India)")
-user_input = st.text_input("Ask your question here:")
+user_input = st.text_input("Ask your question here(by pressing on the link https://cdn.botpress.cloud/webchat/v3.0/shareable.html?configUrl=https://files.bpcontent.cloud/2025/06/20/11/20250620115114-AGZK5VDG.json")
 
 # Process input
 if user_input:
@@ -154,18 +134,7 @@ if user_input:
         })
 
     # Call OpenAI
-    try:
-        response = openai.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=chat_messages,
-            max_tokens=500,
-            temperature=0.7
-        )
-        bot_reply = response.choices[0].message.content.strip()
-    except Exception as e:
-        bot_reply = f"⚠️ Error: {str(e)}"
-
-    st.session_state.messages.append(("bot", bot_reply))
+   
 
 # Display messages
 for role, msg in st.session_state.messages:
